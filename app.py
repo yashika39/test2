@@ -53,6 +53,9 @@ user_data = user_report()
 st.subheader('Patient Data')
 st.write(user_data)
 
+# Ensure the features match
+user_data = user_data[x.columns]
+
 # MODEL
 rf = RandomForestClassifier()
 rf.fit(x_train, y_train)
@@ -139,4 +142,5 @@ st.subheader('Your Report: ')
 output = 'You are not Diabetic' if user_result[0] == 0 else 'You are Diabetic'
 st.title(output)
 st.subheader('Accuracy: ')
-st.write(f'{accuracy_score(y_test, rf.predict(x_test)) * 100}%')
+st.write(f'{accuracy_score(y_test, rf.predict(x_test)) * 100:.2f}%')
+
