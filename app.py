@@ -64,17 +64,15 @@ st.title(output)
 st.subheader('Accuracy: ')
 st.write(f'{accuracy_score(y_test, rf.predict(x_test)) * 100:.2f}%')
 
-# Visualization in Pie Chart Form
+# Visualization in Bar Chart Form
 st.subheader('Visualisation')
 
-# Plotting the pie chart for user's data
-labels = user_data.columns.tolist()
-sizes = user_data.iloc[0].tolist()
+# Plotting the bar chart for user's data
+fig, ax = plt.subplots()
+ax.bar(user_data.columns, user_data.iloc[0], color='skyblue')
+ax.set_ylabel('Values')
+ax.set_title('User Input Data')
+ax.tick_params(axis='x', rotation=45)
 
-fig1, ax1 = plt.subplots()
-ax1.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90)
-ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-
-st.pyplot(fig1)
-
+st.pyplot(fig)
 
