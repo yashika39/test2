@@ -20,9 +20,6 @@ x = df.drop(['Outcome'], axis=1)
 y = df['Outcome']
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
 
-# Debugging: Print the column names in x
-st.write("Columns in x:", x.columns.tolist())
-
 # Function
 def user_report():
     pregnancies = st.sidebar.slider('Pregnancies', 0, 17, 3)
@@ -44,6 +41,16 @@ def user_report():
         'DiabetesPedigreeFunction': dpf,
         'Age': age
     }
+    
+    # Initialize additional columns with zeros
+    additional_columns = [
+        'NewBMI_Obesity 1', 'NewBMI_Obesity 2', 'NewBMI_Obesity 3',
+        'NewBMI_Overweight', 'NewBMI_Underweight', 'NewInsulinScore_Normal',
+        'NewGlucose_Low', 'NewGlucose_Normal', 'NewGlucose_Overweight', 'NewGlucose_Secret'
+    ]
+    for col in additional_columns:
+        user_report_data[col] = 0  # Adjust initialization if necessary
+
     report_data = pd.DataFrame(user_report_data, index=[0])
     return report_data
 
@@ -52,16 +59,8 @@ user_data = user_report()
 st.subheader('Patient Data')
 st.write(user_data)
 
-# Debugging: Print the column names in user_data
-st.write("Columns in user_data:", user_data.columns.tolist())
-
 # Ensure the features match
-try:
-    user_data = user_data[x.columns]
-except KeyError as e:
-    st.write("KeyError: ", e)
-    st.write("Available columns in user_data:", user_data.columns.tolist())
-    st.write("Expected columns from x:", x.columns.tolist())
+user_data = user_data[x.columns]
 
 # Model
 rf = RandomForestClassifier()
@@ -150,4 +149,3 @@ output = 'You are not Diabetic' if user_result[0] == 0 else 'You are Diabetic'
 st.title(output)
 st.subheader('Accuracy: ')
 st.write(f'{accuracy_score(y_test, rf.predict(x_test)) * 100:.2f}%')
-
