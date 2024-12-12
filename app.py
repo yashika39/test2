@@ -20,8 +20,8 @@ x = df.drop(['Outcome'], axis=1)
 y = df['Outcome']
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
 
-# Print the column names in x
-print("Columns in x:", x.columns.tolist())
+# Debugging: Print the column names in x
+st.write("Columns in x:", x.columns.tolist())
 
 # Function
 def user_report():
@@ -52,11 +52,16 @@ user_data = user_report()
 st.subheader('Patient Data')
 st.write(user_data)
 
-# Print the column names in user_data
-print("Columns in user_data:", user_data.columns.tolist())
+# Debugging: Print the column names in user_data
+st.write("Columns in user_data:", user_data.columns.tolist())
 
 # Ensure the features match
-user_data = user_data[x.columns]
+try:
+    user_data = user_data[x.columns]
+except KeyError as e:
+    st.write("KeyError: ", e)
+    st.write("Available columns in user_data:", user_data.columns.tolist())
+    st.write("Expected columns from x:", x.columns.tolist())
 
 # Model
 rf = RandomForestClassifier()
