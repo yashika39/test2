@@ -59,7 +59,7 @@ user_result = rf.predict(user_data)
 
 # Prediction Output
 st.subheader('Your Report: ')
-output = 'You are not Diabetic' if user_result[0] == 0 else 'You are Diabetic'
+output = 'You are healthy ' if user_result[0] == 0 else 'You are Diabetic'
 st.title(output)
 st.subheader('Accuracy: ')
 st.write(f'{accuracy_score(y_test, rf.predict(x_test)) * 100:.2f}%')
