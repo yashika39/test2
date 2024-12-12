@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
@@ -44,7 +46,10 @@ def user_report():
     report_data = pd.DataFrame(user_report_data, index=[0])
     return report_data
 
-# Patient Data
+# Sidebar for selecting algorithm
+algorithm = st.sidebar.selectbox('Select Algorithm', ('Random Forest', 'Logistic Regression', 'K-Nearest Neighbors'))
+
+# Get patient data
 user_data = user_report()
 st.subheader('Patient Data')
 st.write(user_data)
@@ -52,17 +57,23 @@ st.write(user_data)
 # Ensure the features match
 user_data = user_data[x.columns]
 
-# Model
-rf = RandomForestClassifier()
-rf.fit(x_train, y_train)
-user_result = rf.predict(user_data)
+# Model Selection and Training
+if algorithm == 'Random Forest':
+    model = RandomForestClassifier()
+elif algorithm == 'Logistic Regression':
+    model = LogisticRegression(max_iter=1000)
+else:
+    model = KNeighborsClassifier()
+
+model.fit(x_train, y_train)
+user_result = model.predict(user_data)
 
 # Prediction Output
 st.subheader('Your Report: ')
 output = 'You are not Diabetic' if user_result[0] == 0 else 'You are Diabetic'
 st.title(output)
 st.subheader('Accuracy: ')
-st.write(f'{accuracy_score(y_test, rf.predict(x_test)) * 100:.2f}%')
+st.write(f'{accuracy_score(y_test, model.predict(x_test)) * 100:.2f}%')
 
 # Visualization in Bar Chart Form
 st.subheader('Visualisation')
