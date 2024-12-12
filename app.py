@@ -20,6 +20,9 @@ x = df.drop(['Outcome'], axis=1)
 y = df['Outcome']
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
 
+# Print the column names in x
+print("Columns in x:", x.columns.tolist())
+
 # Function
 def user_report():
     pregnancies = st.sidebar.slider('Pregnancies', 0, 17, 3)
@@ -48,6 +51,9 @@ def user_report():
 user_data = user_report()
 st.subheader('Patient Data')
 st.write(user_data)
+
+# Print the column names in user_data
+print("Columns in user_data:", user_data.columns.tolist())
 
 # Ensure the features match
 user_data = user_data[x.columns]
@@ -139,3 +145,4 @@ output = 'You are not Diabetic' if user_result[0] == 0 else 'You are Diabetic'
 st.title(output)
 st.subheader('Accuracy: ')
 st.write(f'{accuracy_score(y_test, rf.predict(x_test)) * 100:.2f}%')
+
